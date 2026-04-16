@@ -60,8 +60,8 @@ def _format_results(results: list) -> str:
         seen_urls.add(url)
 
         formatted.append(
-            f"**{title}**\n"
-            f"URL: {url}\n"
+            f"{title}\n"
+            f"URL:{url}\n"
             f"{content}"
         )
 
@@ -77,7 +77,7 @@ def websearch(query: str) -> str:
 
     if client is None:
         return (
-            "Web search unavailable — TAVILY_API_KEY not set. "
+            "Web search unavailable - TAVILY_API_KEY not set. "
             "Add your Tavily API key to .env to enable web search. "
             "Falling back to LLM-only fix."
         )
@@ -88,9 +88,9 @@ def websearch(query: str) -> str:
     try:
         results = client.invoke({"query": clean_query})
         formatted = _format_results(results)
-        print(f"[WebSearch] Got {len(results)} result(s).")
+        print(f"Got {len(results)} result.")
         return formatted
 
     except Exception as e:
-        print(f"[WebSearch] Error: {e}")
+        print(f"Error: {e}")
         return f"Web search failed: {str(e)}. Falling back to LLM-only fix."
