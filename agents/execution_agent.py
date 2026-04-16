@@ -11,24 +11,24 @@ from typing import Tuple, Optional
 
 LANGUAGE_REGISTRY = [
     {
-        "name":             "python",
-        "extensions":       [".py"],
-        "run_cmd":          ["python", "{file}"],
-        "syntax_cmd":       ["python", "-m", "py_compile", "{file}"],
-        "server_keywords":  [
+        "name": "python",
+        "extensions":[".py"],
+        "run_cmd":["python", "{file}"],
+        "syntax_cmd": ["python", "-m", "py_compile", "{file}"],
+        "server_keywords":[
             "app.run(", "flask", "fastapi", "uvicorn", "django",
             "socketio", "tornado", "aiohttp", "starlette",
             "streamlit", "gradio", "panel", "dash",
         ],
-        "detect_keywords":  [
+        "detect_keywords":[
             "def ", "import ", "print(", "if __name__", "class ",
             "elif ", "lambda ", "async def", "await ",
         ],
-        "shebang":          None,
+        "shebang":None,
     },
 
     {
-        "name":             "javascript",
+        "name":"javascript",
         "extensions":       [".js"],
         "run_cmd":          ["node", "{file}"],
         "syntax_cmd":       ["node", "--check", "{file}"],
