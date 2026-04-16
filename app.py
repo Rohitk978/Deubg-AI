@@ -31,12 +31,12 @@ def debug():
         selected_tool = "both"
 
     state = {
-        "messages":         conversation,
-        "code":             user_input,
-        "iteration":        0,
-        "selected_tool":    selected_tool,
-        "fix_attempts":     0,
-        "max_fix_attempts": 3,
+        "messages": conversation,
+        "code": user_input,
+        "iteration":0,
+        "selected_tool":selected_tool,
+        "fix_attempts":0,
+        "max_fix_attempts":3,
     }
 
     graph  = build_graph(state)
@@ -52,9 +52,9 @@ def debug():
     conversation.append(AIMessage(content=final_answer))
 
     return jsonify({
-        "solution":  final_answer,
-        "analysis":  result.get("analysis", ""),
-        "tool_used": result.get("selected_tool", mode),
+        "solution":final_answer,
+        "analysis":result.get("analysis", ""),
+        "tool_used":result.get("selected_tool", mode),
     })
 
 
