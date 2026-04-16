@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Debug Agent</title>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:system-ui,-apple-system,Segoe UI,Roboto;
+    background:#000;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    height:100vh;
+    overflow:hidden;
+}
+
+/* STAR CANVAS — sits behind everything */
+#starfield{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    z-index:0;
+    pointer-events:none;
+}
+
+/* all content above starfield */
+.header,.chat,.input-area{position:relative;z-index:1;}
+
+/* HEADER */
+.header{
+    padding:12px 20px;
+    font-size:15px;
+    font-weight:600;
+    border-bottom:1px solid #1a1a1a;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(6px);
+    letter-spacing:.3px;
+}
+
+/* CHAT */
+.chat{
+    flex:1;
+    overflow-y:auto;
+    padding:20px 0 12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    scrollbar-width:thin;
+    scrollbar-color:#222 transparent;
+}
+.chat::-webkit-scrollbar{width:4px}
+.chat::-webkit-scrollbar-thumb{background:#222;border-radius:2px}
+
+/* MESSAGE ROW */
+.message-row{
+    width:760px;
+    max-width:92%;
+    display:flex;
+    margin-bottom:10px;
+}
+.user{justify-content:flex-end}
+.ai{justify-content:flex-start}
+
+/* BUBBLES */
+.message{
+    padding:11px 14px;
+    border-radius:10px;
+    max-width:82%;
+    font-size:13px;
+    line-height:1.55;
+    word-break:break-word;
+    overflow-wrap:break-word;
+}
+
+/* user bubble — grey */
+.user .message{
+    background:#2a2a2a;
+    color:#fff;
+    border:1px solid #333;
+}
+
+/* ai bubble — black box white text */
+.ai .message{
+    background:#0d0d0d;
+    color:#fff;
+    border:1px solid #222;
+    max-width:90%;
+}
+
+/* keep code blocks from overflowing */
+.ai .message pre{
+    overflow-x:auto;
+    max-width:100%;
+    background:#111;
+    border-radius:6px;
+    padding:10px;
+    margin:8px 0;
+}
+.ai .message code{
+    font-family:monospace;
+    font-size:12px;
+    white-space:pre;
+    word-break:normal;
+    overflow-wrap:normal;
+}
+/* inline code */
+.ai .message p code,
+.ai .message li code{
+    background:#1a1a1a;
+    padding:1px 5px;
+    border-radius:3px;
+    white-space:nowrap;
+}
+
+.ai .message h2,.ai .message h3{color:#fff;margin:10px 0 4px;font-size:14px}
+.ai .message p{margin:4px 0}
+.ai .message ul,.ai .message ol{padding-left:18px;margin:4px 0}
+.ai .message hr{border:none;border-top:1px solid #222;margin:8px 0}
+.ai .message strong{color:#e0e0e0}
+
+/* tool badge */
+.badge{font-size:10px;color:#555;margin-bottom:5px}
+
+/* user message pre — keep code intact */
+.user .message pre{
+    margin:0;
+    white-space:pre;
+    font-family:monospace;
+    font-size:12px;
+    overflow-x:auto;
+    max-width:100%;
+    word-break:normal;
+}
+
+/* INPUT AREA */
+.input-area{
+    border-top:1px solid #1a1a1a;
+    padding:10px 12px;
+    background:rgba(0,0,0,0.8);
+    backdrop-filter:blur(6px);
+}
+
+.input-box{
+    width:760px;
+    max-width:92%;
+    margin:auto;
+    display:flex;
+    gap:8px;
+    align-items:flex-end;
+}
+
+/* TEXTAREA — grey, code intact, no overflow */
+textarea{
+    flex:1;
+    min-height:60px;
+    max-height:200px;
+    padding:10px 12px;
+    border-radius:8px;
+    border:1px solid #333;
+    outline:none;
+    background:#1e1e1e;
+    color:#fff;
+    font-size:13px;
+    font-family:monospace;
+    resize:none;
+    line-height:1.5;
+    white-space:pre;
+    overflow-wrap:normal;
+    overflow-x:auto;
+    overflow-y:auto;
+    word-break:normal;
+}
+textarea:focus{border-color:#444}
+textarea::placeholder{color:#555}
+
+/* SEND BUTTON — white */
+button.send{
+    width:68px;
+    height:42px;
+    border:none;
+    border-radius:8px;
+    background:#ffffff;
+    color:#000;
+    font-weight:700;
+    font-size:13px;
+    cursor:pointer;
+    flex-shrink:0;
+    transition:background .15s;
+}
+button.send:hover{background:#e0e0e0}
+button.send:active{background:#ccc}
+
+/* 3-DOT MENU */
+.menu-wrapper{position:relative;flex-shrink:0}
+.menu-btn{
+    width:42px;height:42px;
+    border-radius:8px;
+    border:1px solid #333;
+    background:#1a1a1a;
+    color:#aaa;
+    font-size:20px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s;
+}
+.menu-btn:hover{background:#252525}
+
+.menu{
+    position:absolute;
+    bottom:50px;right:0;
+    background:#111;
+    border:1px solid #2a2a2a;
+    border-radius:8px;
+    display:none;
+    flex-direction:column;
+    min-width:110px;
+    overflow:hidden;
+}
+.menu div{
+    padding:9px 12px;
+    cursor:pointer;
+    font-size:13px;
+    color:#ccc;
+    transition:background .1s;
+}
+.menu div:hover{background:#1e1e1e;color:#fff}
+
+/* MODE INDICATOR */
+.mode-label{
+    font-size:10px;
+    color:#555;
+    text-align:right;
+    margin-bottom:3px;
+    width:760px;
+    max-width:92%;
+    margin-left:auto;margin-right:auto;
+}
+
+/* LOADING */
+.loading{opacity:.5;font-style:italic;font-size:13px}
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<div class="header">&#x1F9E0; Debug AI</div>
+
+<div id="chat" class="chat"></div>
+
+<div class="input-area">
+<div class="mode-label" id="modeLabel">mode: both</div>
+<div class="input-box">
+    <textarea id="input" placeholder="Paste your code or error here..."></textarea>
+
+    <div class="menu-wrapper">
+        <button class="menu-btn" onclick="toggleMenu()">&#8943;</button>
+        <div id="menu" class="menu">
+            <div onclick="setMode('both')">Both</div>
+            <div onclick="setMode('llm')">Model</div>
+            <div onclick="setMode('web')">Web</div>
+        </div>
+    </div>
+
+    <button class="send" onclick="sendMessage()">Send</button>
+</div>
+</div>
+
+<script>
+/* ── STARFIELD ── */
+(function(){
+    const c = document.getElementById('starfield');
+    const ctx = c.getContext('2d');
+    let W, H, stars = [], nebulas = [];
+
+    function resize(){
+        W = c.width  = window.innerWidth;
+        H = c.height = window.innerHeight;
+    }
+
+    function initStars(){
+        stars = [];
+        for(let i=0;i<220;i++){
+            stars.push({
+                x: Math.random()*W,
+                y: Math.random()*H,
+                r: Math.random()*1.4+0.2,
+                speed: Math.random()*0.18+0.02,
+                opacity: Math.random()*0.7+0.3,
+                twinkle: Math.random()*Math.PI*2
+            });
+        }
+        nebulas = [];
+        for(let i=0;i<6;i++){
+            nebulas.push({
+                x: Math.random()*W,
+                y: Math.random()*H,
+                rx: Math.random()*180+80,
+                ry: Math.random()*100+40,
+                hue: [240,260,200,280,220,300][i],
+                opacity: Math.random()*0.035+0.01,
+                speedX: (Math.random()-.5)*0.06,
+                speedY: (Math.random()-.5)*0.04
+            });
+        }
+    }
+
+    let frame=0;
+    function draw(){
+        ctx.clearRect(0,0,W,H);
+
+        /* nebula blobs */
+        nebulas.forEach(n=>{
+            n.x += n.speedX; n.y += n.speedY;
+            if(n.x<-n.rx) n.x=W+n.rx;
+            if(n.x>W+n.rx) n.x=-n.rx;
+            if(n.y<-n.ry) n.y=H+n.ry;
+            if(n.y>H+n.ry) n.y=-n.ry;
+            const g = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.rx);
+            g.addColorStop(0,`hsla(${n.hue},80%,60%,${n.opacity})`);
+            g.addColorStop(1,`hsla(${n.hue},80%,60%,0)`);
+            ctx.save();
+            ctx.scale(1, n.ry/n.rx);
+            ctx.beginPath();
+            ctx.arc(n.x, n.y*(n.rx/n.ry), n.rx, 0, Math.PI*2);
+            ctx.fillStyle=g;
+            ctx.fill();
+            ctx.restore();
+        });
+
+        /* stars */
+        frame++;
+        stars.forEach(s=>{
+            s.y += s.speed;
+            if(s.y>H){s.y=0;s.x=Math.random()*W;}
+            s.twinkle += 0.03;
+            const op = s.opacity*(0.7+0.3*Math.sin(s.twinkle));
+            ctx.beginPath();
+            ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+            ctx.fillStyle=`rgba(255,255,255,${op})`;
+            ctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize',()=>{resize();initStars();});
+    resize();
+    initStars();
+    draw();
+})();
+
+/* ── APP LOGIC ── */
+let selectedMode = 'both';
+const chat  = document.getElementById('chat');
+const input = document.getElementById('input');
+
+/* auto-expand textarea — never overflow */
+input.addEventListener('input', ()=>{
+    input.style.height = 'auto';
+    const h = Math.min(input.scrollHeight, 200);
+    input.style.height = h + 'px';
+});
+
+/* Shift+Enter = new line, Enter = send */
+input.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+function toggleMenu(){
+    const m = document.getElementById('menu');
+    m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+}
+
+function setMode(mode){
+    selectedMode = mode;
+    document.getElementById('menu').style.display = 'none';
+    document.getElementById('modeLabel').textContent = 'mode: ' + mode;
+}
+
+/* close menu on outside click */
+document.addEventListener('click', function(e){
+    if(!e.target.closest('.menu-wrapper'))
+        document.getElementById('menu').style.display = 'none';
+});
+
+function escapeHtml(t){
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function addMessage(text, type, tool=''){
+    const row = document.createElement('div');
+    row.className = 'message-row ' + type;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'message';
+
+    if(type === 'ai'){
+        bubble.innerHTML = `<div class="badge">${escapeHtml(tool)}</div>${marked.parse(text)}`;
+    } else {
+        bubble.innerHTML = `<pre><code>${escapeHtml(text)}</code></pre>`;
+    }
+
+    row.appendChild(bubble);
+    chat.appendChild(row);
+    Prism.highlightAll();
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function addLoading(){
+    const row = document.createElement('div');
+    row.className = 'message-row ai';
+    const bubble = document.createElement('div');
+    bubble.className = 'message loading';
+    bubble.textContent = 'Analysing...';
+    row.appendChild(bubble);
+    chat.appendChild(row);
+    chat.scrollTop = chat.scrollHeight;
+    return row;
+}
+
+async function sendMessage(){
+    const userInput = input.value;
+    if(!userInput.trim()) return;
+
+    addMessage(userInput, 'user');
+    input.value = '';
+    input.style.height = '60px';
+
+    const loading = addLoading();
+
+    try{
+        const res = await fetch('/debug',{
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({input: userInput, mode: selectedMode})
+        });
+        const data = await res.json();
+        loading.remove();
+        addMessage(data.solution || 'No response.', 'ai', selectedMode);
+    } catch(err){
+        loading.remove();
+        addMessage('Error: could not reach server.', 'ai', 'error');
+    }
+}
+</script>
+</body>
+</html>
