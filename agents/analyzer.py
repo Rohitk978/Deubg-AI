@@ -7,7 +7,6 @@ from utils.language_detector import detect_language
 from langchain_core.messages import AIMessage
 
 
-# RULE-BASED STATIC ANALYZERS — no LLM needed, 100% reliable
 
 def _run_pyflakes(code: str) -> list:
     """Run pyflakes for undefined names, unused imports, syntax errors."""
