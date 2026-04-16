@@ -7,10 +7,10 @@ import os
 load_dotenv()
 
 HF_MODEL_NAME = "Qwen/Qwen2.5-Coder-1.5B-Instruct"
-HF_HUB        = os.getenv("HF_HUB", "")
-MAX_TOKENS    = 1024
+HF_HUB = os.getenv("HF_HUB", "")
+MAX_TOKENS = 1024
 
-hf_model     = None
+hf_model = None
 hf_tokenizer = None
 
 
@@ -60,7 +60,7 @@ def generate_response(prompt: str) -> str:
             "content": "You are a senior debugging engineer. Follow instructions exactly."
         },
         {
-            "role":    "user",
+            "role": "user",
             "content": prompt
         }
     ]
@@ -81,7 +81,6 @@ def generate_response(prompt: str) -> str:
             do_sample=False,             
             temperature=None,            
             top_p=None,                   
-            # top_k removed — causes "not valid" warning with do_sample=False
             pad_token_id=tokenizer.eos_token_id,
             repetition_penalty=1.1,
         )
