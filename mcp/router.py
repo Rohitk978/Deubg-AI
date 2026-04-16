@@ -9,9 +9,9 @@ def mcp_router(state):
     if not selected_tool:
         selected_tool = "llm_solver"
 
-    print(f"Router: using tool → {selected_tool}")
+    print(f"Router: using tool: {selected_tool}")
 
     return {
         "selected_tool": selected_tool,
-        "next_agent":    "tool_executor",
+        "next_agent": "tool_executor",
     }
