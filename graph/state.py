@@ -10,26 +10,26 @@ class DebugState(TypedDict, total=False):
     """
 
     # conversation history
-    messages:         List[BaseMessage]
+    messages: List[BaseMessage]
 
     # code payloads
-    code:             str   
-    fixed_code:       str   
-    language:         str
+    code: str   
+    fixed_code: str   
+    language: str
 
     # agent communication
-    analysis:         str   
-    selected_tool:    str
-    tool_result:      str
-    output:           str
+    analysis: str   
+    selected_tool: str
+    tool_result: str
+    output: str
 
-    # routing — MUST be a plain str, never a list
-    next_agent:       str
+    # routing: MUST be a plain str, never a list
+    next_agent: str
 
     # execution state
     execution_status: str  
-    iteration:        int
+    iteration: int
 
     # loop-breaker
-    fix_attempts:     int   
+    fix_attempts: int   
     max_fix_attempts: int   
