@@ -29,246 +29,245 @@ LANGUAGE_REGISTRY = [
 
     {
         "name":"javascript",
-        "extensions":       [".js"],
-        "run_cmd":          ["node", "{file}"],
-        "syntax_cmd":       ["node", "--check", "{file}"],
-        "server_keywords":  [
+        "extensions": [".js"],
+        "run_cmd": ["node", "{file}"],
+        "syntax_cmd": ["node", "--check", "{file}"],
+        "server_keywords": [
             "express()", "app.listen(", "http.createserver",
             "https.createserver", "fastify(", "koa(", "hapi",
             "socket.io", "ws.server",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "const ", "let ", "var ", "function ", "console.log",
             "require(", "module.exports", "=>", "async ", "await ",
             "document.", "window.", "process.",
         ],
-        "shebang":          "#!/usr/bin/env node",
+        "shebang": "#!/usr/bin/env node",
     },
 
     # TypeScript 
     {
-        "name":             "typescript",
-        "extensions":       [".ts"],
-        "run_cmd":          ["npx", "ts-node", "{file}"],
-        "syntax_cmd":       ["npx", "tsc", "--noEmit", "--allowJs", "{file}"],
-        "server_keywords":  [
+        "name": "typescript",
+        "extensions": [".ts"],
+        "run_cmd": ["npx", "ts-node", "{file}"],
+        "syntax_cmd": ["npx", "tsc", "--noEmit", "--allowJs", "{file}"],
+        "server_keywords": [
             "express()", "app.listen(", "nestfactory", "fastify(",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             ": string", ": number", ": boolean", "interface ",
             "type ", "<T>", "enum ", ": void", "as string", "as number",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "java",
-        "extensions":       [".java"],
-        "run_cmd":          None,   
-        "syntax_cmd":       ["javac", "{file}"],
-        "server_keywords":  [
+        "name": "java",
+        "extensions": [".java"],
+        "run_cmd": None,   
+        "syntax_cmd": ["javac", "{file}"],
+        "server_keywords": [
             "springapplication.run", "@springbootapplication",
             "tomcat", "jetty", "undertow", "server.start",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "public class ", "public static void main",
             "system.out.println", "import java.", "private ", "protected ",
             "@override", "extends ", "implements ",
         ],
-        "shebang":          None,
-        "compile_run":      True,   
+        "shebang": None,
+        "compile_run": True,   
     },
 
     {
-        "name":             "c",
-        "extensions":       [".c"],
-        "run_cmd":          None,   # compile then run
-        "syntax_cmd":       ["gcc", "-fsyntax-only", "{file}"],
-        "server_keywords":  [
+        "name": "c",
+        "extensions": [".c"],
+        "run_cmd": None,   
+        "syntax_cmd": ["gcc", "-fsyntax-only", "{file}"],
+        "server_keywords": [
             "bind(", "listen(", "accept(", "socket(",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "#include ", "int main(", "printf(", "scanf(",
             "malloc(", "free(", "struct ", "typedef ",
         ],
-        "shebang":          None,
-        "compile_run":      True,
-        "compile_cmd":      ["gcc", "{file}", "-o", "{binary}"],
+        "shebang": None,
+        "compile_run": True,
+        "compile_cmd": ["gcc", "{file}", "-o", "{binary}"],
     },
 
     {
-        "name":             "cpp",
-        "extensions":       [".cpp", ".cc", ".cxx"],
-        "run_cmd":          None,
-        "syntax_cmd":       ["g++", "-fsyntax-only", "{file}"],
-        "server_keywords":  [
+        "name": "cpp",
+        "extensions": [".cpp", ".cc", ".cxx"],
+        "run_cmd": None,
+        "syntax_cmd": ["g++", "-fsyntax-only", "{file}"],
+        "server_keywords": [
             "boost::asio", "asio::", "crow::", "pistache::",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "#include <iostream>", "std::", "cout <<", "cin >>",
             "int main(", "namespace ", "template<", "vector<",
             "nullptr", "auto ",
         ],
-        "shebang":          None,
-        "compile_run":      True,
-        "compile_cmd":      ["g++", "{file}", "-o", "{binary}"],
+        "shebang": None,
+        "compile_run": True,
+        "compile_cmd": ["g++", "{file}", "-o", "{binary}"],
     },
 
     {
-        "name":             "csharp",
-        "extensions":       [".cs"],
-        "run_cmd":          ["dotnet", "script", "{file}"],
-        "syntax_cmd":       ["dotnet", "build"],
-        "server_keywords":  [
+        "name": "csharp",
+        "extensions": [".cs"],
+        "run_cmd": ["dotnet", "script", "{file}"],
+        "syntax_cmd": ["dotnet", "build"],
+        "server_keywords": [
             "webapplication.createbuilder", "app.run()",
             "ihostbuilder", "iwebhostbuilder", "aspnetcore",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "using system", "namespace ", "public class ",
             "console.writeline", "static void main", "async task",
             "var ", "string[] args",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "go",
-        "extensions":       [".go"],
-        "run_cmd":          ["go", "run", "{file}"],
-        "syntax_cmd":       ["go", "vet", "{file}"],
-        "server_keywords":  [
+        "name": "go",
+        "extensions": [".go"],
+        "run_cmd": ["go", "run", "{file}"],
+        "syntax_cmd": ["go", "vet", "{file}"],
+        "server_keywords": [
             "http.listenandserve", "http.listenandservetls",
             "gin.default()", "echo.new()", "fiber.new(",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "package main", "func main()", "fmt.println",
             "import (", ":= ", "var ", "func ", "go func",
             "chan ", "defer ", "goroutine",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "rust",
-        "extensions":       [".rs"],
-        "run_cmd":          ["rustc", "{file}", "-o", "{binary}"],
-        "syntax_cmd":       ["rustc", "--edition", "2021", "--emit=metadata", "-o", "/dev/null", "{file}"],
-        "server_keywords":  [
+        "name": "rust",
+        "extensions": [".rs"],
+        "run_cmd": ["rustc", "{file}", "-o", "{binary}"],
+        "syntax_cmd": ["rustc", "--edition", "2021", "--emit=metadata", "-o", "/dev/null", "{file}"],
+        "server_keywords": [
             "actix_web", "rocket::", "warp::", "axum::",
             "hyper::server", "tokio::main",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "fn main()", "let mut ", "println!(", "use std::",
             "struct ", "impl ", "enum ", "match ", "vec![",
             "unwrap()", "expect(", "pub fn",
         ],
-        "shebang":          None,
-        "compile_run":      True,
-        "compile_cmd":      ["rustc", "{file}", "-o", "{binary}"],
+        "shebang": None,
+        "compile_run": True,
+        "compile_cmd": ["rustc", "{file}", "-o", "{binary}"],
     },
 
     {
-        "name":             "php",
-        "extensions":       [".php"],
-        "run_cmd":          ["php", "{file}"],
-        "syntax_cmd":       ["php", "-l", "{file}"],
-        "server_keywords":  [
+        "name": "php",
+        "extensions": [".php"],
+        "run_cmd": ["php", "{file}"],
+        "syntax_cmd": ["php", "-l", "{file}"],
+        "server_keywords": [
             "laravel", "symfony", "slim\\", "echo new server",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "<?php", "echo ", "$_get", "$_post", "$_session",
             "function ", "class ", "->", "namespace ",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "ruby",
-        "extensions":       [".rb"],
-        "run_cmd":          ["ruby", "{file}"],
-        "syntax_cmd":       ["ruby", "-c", "{file}"],
-        "server_keywords":  [
+        "name": "ruby",
+        "extensions": [".rb"],
+        "run_cmd": ["ruby", "{file}"],
+        "syntax_cmd": ["ruby", "-c", "{file}"],
+        "server_keywords": [
             "rails", "sinatra", "rack::", "puma", "unicorn",
             "run lambdas", "rack::handler",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "def ", "end", "puts ", "require ", "class ",
             "attr_", "do |", "each do", "| do",
         ],
-        "shebang":          "#!/usr/bin/env ruby",
+        "shebang": "#!/usr/bin/env ruby",
     },
 
     {
-        "name":             "kotlin",
-        "extensions":       [".kt"],
-        "run_cmd":          ["kotlinc", "-script", "{file}"],
-        "syntax_cmd":       ["kotlinc", "{file}", "-include-runtime", "-d", "/tmp/out.jar"],
-        "server_keywords":  [
+        "name": "kotlin",
+        "extensions": [".kt"],
+        "run_cmd": ["kotlinc", "-script", "{file}"],
+        "syntax_cmd": ["kotlinc", "{file}", "-include-runtime", "-d", "/tmp/out.jar"],
+        "server_keywords": [
             "embeddedserver(", "ktor", "spring",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "fun main(", "val ", "var ", "println(", "data class ",
             "object ", "companion object", "suspend fun", "coroutine",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "swift",
-        "extensions":       [".swift"],
-        "run_cmd":          ["swift", "{file}"],
-        "syntax_cmd":       ["swiftc", "-typecheck", "{file}"],
-        "server_keywords":  [
+        "name": "swift",
+        "extensions": [".swift"],
+        "run_cmd": ["swift", "{file}"],
+        "syntax_cmd": ["swiftc", "-typecheck", "{file}"],
+        "server_keywords": [
             "vapor", "kitura", "perfect.", "hummingbird",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "import swift", "var ", "let ", "func ", "print(",
             "class ", "struct ", "enum ", "guard ", "if let ",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "bash",
-        "extensions":       [".sh", ".bash"],
-        "run_cmd":          ["bash", "{file}"],
-        "syntax_cmd":       ["bash", "-n", "{file}"],
-        "server_keywords":  [],
-        "detect_keywords":  [
+        "name": "bash",
+        "extensions": [".sh", ".bash"],
+        "run_cmd": ["bash", "{file}"],
+        "syntax_cmd": ["bash", "-n", "{file}"],
+        "detect_keywords": [
             "#!/bin/bash", "#!/bin/sh", "echo ", "if [", "fi",
             "for ", "do\n", "done", "export ", "source ",
         ],
-        "shebang":          "#!/bin/bash",
+        "shebang": "#!/bin/bash",
     },
 
     {
-        "name":             "r",
-        "extensions":       [".r"],
-        "run_cmd":          ["Rscript", "{file}"],
-        "syntax_cmd":       ["Rscript", "--vanilla", "-e", "parse(file='{file}')"],
-        "server_keywords":  [
+        "name": "r",
+        "extensions": [".r"],
+        "run_cmd": ["Rscript", "{file}"],
+        "syntax_cmd": ["Rscript", "--vanilla", "-e", "parse(file='{file}')"],
+        "server_keywords": [
             "shiny::runapp", "plumber", "httpuv",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "<- ", "library(", "require(", "data.frame(",
             "ggplot(", "print(", "cat(", "function(",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
-        "name":             "scala",
-        "extensions":       [".scala"],
-        "run_cmd":          ["scala", "{file}"],
-        "syntax_cmd":       ["scalac", "{file}"],
-        "server_keywords":  [
+        "name": "scala",
+        "extensions": [".scala"],
+        "run_cmd": ["scala", "{file}"],
+        "syntax_cmd": ["scalac", "{file}"],
+        "server_keywords": [
             "akka.http", "play.api", "http4s", "zio-http",
         ],
-        "detect_keywords":  [
+        "detect_keywords": [
             "object ", "def main", "println(", "val ", "var ",
             "case class", "trait ", "extends ", "implicit ",
         ],
-        "shebang":          None,
+        "shebang": None,
     },
 
     {
@@ -283,54 +282,8 @@ LANGUAGE_REGISTRY = [
             "#!/usr/bin/perl", "use strict", "use warnings",
             "my $", "print ", "sub ", "foreach ", "@_",
         ],
-        "shebang":          "#!/usr/bin/perl",
+        "shebang": "#!/usr/bin/perl",
     },
-
-    {
-        "name":             "lua",
-        "extensions":       [".lua"],
-        "run_cmd":          ["lua", "{file}"],
-        "syntax_cmd":       ["luac", "-p", "{file}"],
-        "server_keywords":  [
-            "openresty", "nginx", "lapis.", "orbit.",
-        ],
-        "detect_keywords":  [
-            "local ", "function ", "end", "print(",
-            "require(", "table.", "string.", "io.",
-        ],
-        "shebang":          None,
-    },
-
-    {
-        "name":             "dart",
-        "extensions":       [".dart"],
-        "run_cmd":          ["dart", "run", "{file}"],
-        "syntax_cmd":       ["dart", "analyze", "{file}"],
-        "server_keywords":  [
-            "shelf", "angel_framework", "dart:io", "httpserver.bind",
-        ],
-        "detect_keywords":  [
-            "void main(", "print(", "var ", "final ", "const ",
-            "class ", "import 'dart:", "async ", "await ", "future<",
-        ],
-        "shebang":          None,
-    },
-
-    {
-        "name":             "haskell",
-        "extensions":       [".hs"],
-        "run_cmd":          ["runhaskell", "{file}"],
-        "syntax_cmd":       ["ghc", "-fno-code", "{file}"],
-        "server_keywords":  [
-            "warp", "scotty", "servant", "yesod", "snap.",
-        ],
-        "detect_keywords":  [
-            "main ::", "putstrln", "import data.", "module ",
-            "where", "let ", "in ", "do\n", ":: io",
-        ],
-        "shebang":          None,
-    },
-]
 
 
 # DETECTION
@@ -338,11 +291,10 @@ LANGUAGE_REGISTRY = [
 def _strip_fences(code: str) -> Tuple[str, Optional[str]]:
     """
     Strips markdown fences and returns (clean_code, detected_lang_hint).
-    e.g.  ```javascript\\n...\\n```  →  (code, "javascript")
     """
     match = re.search(r"```(\w+)?\n(.*?)```", code, re.DOTALL)
     if match:
-        lang_hint = match.group(1)           # e.g. "python", "javascript", None
+        lang_hint = match.group(1)           
         clean     = match.group(2).strip()
         return clean, lang_hint
     return code.strip(), None
@@ -354,14 +306,14 @@ def _detect_language(code: str, hint: Optional[str], state_language: str) -> dic
     Priority: 1) state['language']  2) fence hint  3) keyword scoring
     Falls back to Python if nothing matches.
     """
-    # explicit language set in state (most reliable)
+    # explicit language set in state 
     if state_language:
         lang = state_language.lower().strip()
         for entry in LANGUAGE_REGISTRY:
             if lang == entry["name"] or lang in [e.lstrip(".") for e in entry["extensions"]]:
                 return entry
 
-    # fence hint  (e.g. ```javascript)
+    # fence hint  
     if hint:
         hint_lower = hint.lower()
         for entry in LANGUAGE_REGISTRY:
