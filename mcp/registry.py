@@ -38,24 +38,24 @@ TOOLS = {
 # Used by router to pick the right tool based on analysis content
 KEYWORD_TOOL_MAP = {
     #  llm_solver
-    "syntax error":    "llm_solver",
-    "keyerror":        "llm_solver",
-    "typeerror":       "llm_solver",
-    "crash":           "llm_solver",
-    "sql injection":   "llm_solver",
-    "f-string":        "llm_solver",
-    "debug=true":      "llm_solver",
-    "resource leak":   "llm_solver",
-    "bare except":     "llm_solver",
+    "syntax error": "llm_solver",
+    "keyerror": "llm_solver",
+    "typeerror": "llm_solver",
+    "crash": "llm_solver",
+    "sql injection": "llm_solver",
+    "f-string": "llm_solver",
+    "debug=true": "llm_solver",
+    "resource leak": "llm_solver",
+    "bare except": "llm_solver",
     "mutable default": "llm_solver",
-    "hardcoded":       "llm_solver",
+    "hardcoded": "llm_solver",
 
     #  web_search
-    "import error":    "web_search",
+    "import error": "web_search",
     "modulenotfounderror": "web_search",
     "no module named": "web_search",
-    "dependency":      "web_search",
-    "api error":       "web_search",
+    "dependency": "web_search",
+    "api error": "web_search",
     "connection error": "web_search",
 }
 
